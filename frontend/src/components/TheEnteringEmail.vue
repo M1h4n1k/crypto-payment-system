@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { Currency } from "../types.ts";
+import { Currency, Order } from "../types.ts";
 
 const props = defineProps<{
-  currency: Currency;
-  amount: number;
-  email: string;
+  chosenCurrency: Currency;
+  order: Order;
 }>();
 
 defineEmits<{
@@ -13,7 +12,7 @@ defineEmits<{
   (e: "proceed", em: string): void;
 }>();
 
-const email = ref(props.email);
+const email = ref(props.order.email);
 </script>
 
 <template>
@@ -23,7 +22,7 @@ const email = ref(props.email);
         <div
           class="h-12 w-12 rounded-full"
           :style="{
-            'background-color': currency['color'],
+            'background-color': chosenCurrency['color'],
           }"
         ></div>
         <img
@@ -36,11 +35,11 @@ const email = ref(props.email);
         />
       </div>
       <span
-        v-if="amount === -1"
+        v-if="order.amountCrypto === -1"
         class="h-8 w-1/3 animate-pulse rounded-xl bg-gray-100"
       />
       <span v-else class="text-xl font-semibold">
-        {{ amount }} {{ currency["name"].toUpperCase() }}
+        {{ order.amountCrypto }} {{ chosenCurrency["name"].toUpperCase() }}
       </span>
     </div>
 

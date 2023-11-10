@@ -1,18 +1,14 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { Currency } from "../types.ts";
+import { Currency, Order } from "../types.ts";
 
 defineProps<{
-  currency: Currency;
-  amount: number;
+  chosenCurrency: Currency;
+  order: Order;
 }>();
 
 const emit = defineEmits<{
   (e: "cancel"): void;
 }>();
-
-const address = ref("0x9C08f04E516165bFE5aDC6A2c5eBbC16EA79afDA");
-const status = ref("Unpaid");
 </script>
 
 <template>
@@ -22,7 +18,7 @@ const status = ref("Unpaid");
         <div
           class="h-12 w-12 rounded-full"
           :style="{
-            'background-color': currency['color'],
+            'background-color': chosenCurrency['color'],
           }"
         ></div>
         <img
@@ -35,7 +31,7 @@ const status = ref("Unpaid");
         />
       </div>
       <span class="text-xl font-semibold">
-        {{ amount }} {{ currency["name"].toUpperCase() }}
+        {{ order["amountCrypto"] }} {{ chosenCurrency["name"].toUpperCase() }}
       </span>
     </div>
 
@@ -45,13 +41,13 @@ const status = ref("Unpaid");
         type="text"
         class="block w-full border-b-2 border-[#00A9FF] py-1 font-semibold outline-none"
       >
-        {{ address }}
+        {{ order["address"] }}
       </span>
     </div>
     <div class="mt-4 w-full">
       <span class="block text-base font-semibold text-gray-400"> Status </span>
       <span type="text" class="block w-full font-semibold outline-none">
-        {{ status }}
+        {{ order["status"] === 0 ? "Waiting for payment" : "Payment received" }}
       </span>
     </div>
 

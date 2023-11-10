@@ -8,18 +8,25 @@ export class Currency {
   }
 }
 
-export interface Order {
-  _id: string;
-  currency: string;
-  currencyCrypto: string;
-  amountEUR: number;
-  amountCrypto: number;
-  description: string;
-  created_at: string;
-  email: string;
-  status: number;
-  address: string;
-  stage: number;
-  callback_url: string;
-  sign: string;
+export class Order {
+  _id: string = "";
+  currency: string = "";
+  currencyCrypto: string = "";
+  amountFiat: number = -1;
+  amountCrypto: number = -1;
+  description: string = "";
+  created_at: string = "";
+  email: string = "";
+  status: number = -1;
+  address: string = "";
+  stage: number = -1;
+  callback_url: string = "";
+  sign: string = "";
 }
+
+export type CryptoCurrencyType = {
+  BTC: { color: string };
+  ETH: { color: string };
+  USDT: { color: string };
+  TON: { color: string };
+};

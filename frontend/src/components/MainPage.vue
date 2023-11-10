@@ -7,33 +7,26 @@ import TheSkeleton from "./TheSkeleton.vue";
 
 import { nextTick, onMounted, ref, watch } from "vue";
 import { CRYPTO_CURRENCIES } from "../currencies";
-import { Currency, Order } from "../types.ts";
+import { CryptoCurrencyType, Currency, Order } from "../types.ts";
 
-const email = ref("");
-const amount = ref(-1);
-const amountCrypto = ref(0);
-const currency = ref("EUR");
 const chosenCurrency = ref(new Currency());
+let order = ref(new Order());
 let dataLoaded = false;
-
-const stage = ref(-1);
 
 let oid = new URL(location.href).searchParams.get("oid");
 
 onMounted(() => {
   fetch(`http://127.0.0.1:8000/order/${oid}`)
     .then((response) => response.json())
-    .then((data) => {
-      if (data["currencyCrypto"] !== "") {
-        chosenCurrency.value.name = data["currencyCrypto"];
+    .then((data: Order) => {
+      order.value = data;
+      if (data.currencyCrypto !== "") {
+        chosenCurrency.value.name = data.currencyCrypto;
         chosenCurrency.value.color =
-          CRYPTO_CURRENCIES[data["currencyCrypto"]]["color"];
+          CRYPTO_CURRENCIES[data.currencyCrypto as keyof CryptoCurrencyType][
+            "color"
+          ];
       }
-      email.value = data["email"];
-      amount.value = data["amountEUR"];
-      amountCrypto.value = data["amountCrypto"];
-      currency.value = data["currency"];
-      stage.value = data["stage"];
       nextTick(() => {
         dataLoaded = true;
       });
@@ -55,68 +48,77 @@ watch(
   () => chosenCurrency.value.name,
   async (newCurrency) => {
     if (!dataLoaded) return;
-    amountCrypto.value = -1;
+    order.value.amountCrypto = -1;
     const orderUpd = await updateOrder({
       currencyCrypto: newCurrency,
     });
-    amountCrypto.value = orderUpd["amountCrypto"];
+    order.value.amountCrypto = orderUpd["amountCrypto"];
   },
 );
 
-watch(email, (newEmail) => {
-  if (!dataLoaded) return;
-  updateOrder({
-    email: newEmail,
-  });
-});
+watch(
+  () => order.value.email,
+  async (newEmail) => {
+    if (!dataLoaded) return;
+    const orderUpd = await updateOrder({
+      email: newEmail,
+    });
+    order.value.address = orderUpd["address"];
+  },
+);
 
-watch(stage, (newStage) => {
-  if (!dataLoaded) return;
-  updateOrder({
-    stage: newStage,
-  });
-});
+watch(
+  () => order.value.stage,
+  (newStage) => {
+    if (!dataLoaded) return;
+    updateOrder({
+      stage: newStage,
+    });
+  },
+);
 </script>
 
 <template>
   <div
     class="flex h-[440px] w-11/12 min-w-[300px] max-w-[650px] flex-col rounded-3xl bg-white"
   >
-    <TheHeader :amount="amount" :currency="currency" />
+    <TheHeader :order="order" />
 
-    <TheSkeleton v-if="stage === -1" />
+    <TheSkeleton v-if="order.stage === -1" />
     <TheChoosingCurrency
-      v-else-if="stage === 0"
+      v-else-if="order.stage === 0"
       @methodChosen="
         (m: string) => {
-          chosenCurrency = new Currency(m, CRYPTO_CURRENCIES[m]['color']);
-          stage = 1;
+          chosenCurrency = new Currency(
+            m,
+            CRYPTO_CURRENCIES[m as keyof CryptoCurrencyType]['color'],
+          );
+          order.stage = 1;
         }
       "
     />
     <TheEnteringEmail
-      v-else-if="stage === 1"
+      v-else-if="order.stage === 1"
       @cancel="
         () => {
           chosenCurrency = new Currency();
-          stage = 0;
+          order.stage = 0;
         }
       "
       @proceed="
         (e: string) => {
-          email = e;
-          stage = 2;
+          order.email = e;
+          order.stage = 2;
         }
       "
-      :amount="amountCrypto"
-      :currency="chosenCurrency"
-      :email="email"
+      :chosenCurrency="chosenCurrency"
+      :order="order"
     />
     <ThePaymentStatus
-      v-else-if="stage === 2"
-      :amount="amountCrypto"
-      :currency="chosenCurrency"
-      @cancel="() => (stage = 1)"
+      v-else-if="order.stage === 2"
+      :chosenCurrency="chosenCurrency"
+      @cancel="() => (order.stage = 1)"
+      :order="order"
     />
   </div>
 </template>

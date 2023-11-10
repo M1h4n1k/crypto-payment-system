@@ -1,4 +1,6 @@
-export const CRYPTO_CURRENCIES = {
+import { CryptoCurrencyType } from "./types.ts";
+
+export const CRYPTO_CURRENCIES: CryptoCurrencyType = {
   BTC: {
     color: "#F7931A",
   },

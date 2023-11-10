@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import { Order } from "../types.ts";
+
 defineProps<{
-  amount: number;
-  currency: string;
+  order: Order;
 }>();
 </script>
 
@@ -13,10 +14,10 @@ defineProps<{
     <div class="flex items-center justify-center">
       Evicon &bull;&nbsp;
       <span
-        v-if="amount === -1"
+        v-if="order.amountFiat === -1"
         class="mt-1 h-5 w-12 animate-pulse rounded-xl bg-gray-100"
       />
-      <span v-else>{{ amount }} {{ currency }}</span>
+      <span v-else>{{ order.amountFiat }} {{ order.currency }}</span>
     </div>
     <span>Support</span>
   </div>
