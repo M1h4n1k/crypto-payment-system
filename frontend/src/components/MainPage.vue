@@ -10,7 +10,7 @@ import { CRYPTO_CURRENCIES } from "../currencies";
 import { Currency, Order } from "../types.ts";
 
 const email = ref("");
-const amount = ref(1000);
+const amount = ref(-1);
 const amountCrypto = ref(0);
 const currency = ref("EUR");
 const chosenCurrency = ref(new Currency());
@@ -55,6 +55,7 @@ watch(
   () => chosenCurrency.value.name,
   async (newCurrency) => {
     if (!dataLoaded) return;
+    amountCrypto.value = -1;
     const orderUpd = await updateOrder({
       currencyCrypto: newCurrency,
     });
@@ -78,7 +79,9 @@ watch(stage, (newStage) => {
 </script>
 
 <template>
-  <div class="h-[440px] w-1/2 min-w-[300px] max-w-[650px] rounded-3xl bg-white">
+  <div
+    class="flex h-[440px] w-11/12 min-w-[300px] max-w-[650px] flex-col rounded-3xl bg-white"
+  >
     <TheHeader :amount="amount" :currency="currency" />
 
     <TheSkeleton v-if="stage === -1" />

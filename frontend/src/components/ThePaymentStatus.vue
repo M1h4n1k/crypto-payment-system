@@ -16,7 +16,7 @@ const status = ref("Unpaid");
 </script>
 
 <template>
-  <div class="flex w-full flex-col items-center justify-center px-24 py-8">
+  <div class="flex h-full w-full flex-col items-center justify-center px-24">
     <div class="flex w-full items-center justify-between">
       <div class="relative mb-2 flex items-center space-x-2">
         <div

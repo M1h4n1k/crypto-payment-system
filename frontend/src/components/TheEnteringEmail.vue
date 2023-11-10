@@ -17,7 +17,7 @@ const email = ref(props.email);
 </script>
 
 <template>
-  <div class="flex flex-col items-center justify-center px-24 py-16">
+  <div class="-mt-12 flex h-full flex-col items-center justify-center px-24">
     <div class="flex w-full items-center justify-between">
       <div class="relative mb-2 flex items-center space-x-2">
         <div
@@ -35,7 +35,11 @@ const email = ref(props.email);
           @click="() => $emit('cancel')"
         />
       </div>
-      <span class="text-xl font-semibold">
+      <span
+        v-if="amount === -1"
+        class="h-8 w-1/3 animate-pulse rounded-xl bg-gray-100"
+      />
+      <span v-else class="text-xl font-semibold">
         {{ amount }} {{ currency["name"].toUpperCase() }}
       </span>
     </div>

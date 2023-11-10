@@ -2,7 +2,8 @@ from fastapi import Depends, FastAPI, Response, Cookie
 from starlette.middleware.cors import CORSMiddleware
 import crud
 import schemas
-
+import aiohttp
+import os
 
 app = FastAPI()
 
@@ -16,24 +17,40 @@ app.add_middleware(
 
 CURRENCIES = {
     'BTC': {
+        'cmc_id': '1',
         'color': '#F7931A',
     },
     'ETH': {
+        'cmc_id': '1027',
         'color': '#627EEA',
     },
     'USDT': {
-        'color': '#26A17B'
-    },
-    'BNB': {
-        'color': '#F3BA2F',
+        'cmc_id': '825',
+        'color': '#26A17B',
     },
     'TON': {
+        'cmc_id': '11419',
         'color': '#0088CC',
     },
-    'TRON': {
-        'color': '#D9012C',
-    }
 }
+
+
+async def get_crypto_price(symbol: str) -> float:
+    async with aiohttp.ClientSession() as session:
+        resp = await session.get(
+            'https://pro-api.coinmarketcap.com/v2/tools/price-conversion',
+            headers={
+                'Accepts': 'application/json',
+                'X-CMC_PRO_API_KEY': os.getenv('CMC_API_KEY'),
+            },
+            params={
+                'amount': 1,
+                'symbol': 'USD',
+                'convert_id': CURRENCIES[symbol]['cmc_id'],
+            }
+        )
+        data = await resp.json()
+        return data['data'][0]['quote'][CURRENCIES[symbol]['cmc_id']]['price']
 
 
 @app.get('/order/{_id}')
@@ -57,7 +74,7 @@ async def update_order(_id: str, order: schemas.UpdateOrder):
 
     order.id = _id
     if CURRENCIES.get(order.currencyCrypto) is not None:
-        ratio = 5  # recalculate ratio
+        ratio = await get_crypto_price(order.currencyCrypto)
         order.amountCrypto = upd_order.amountEUR * ratio
 
     return await crud.update_order(order)

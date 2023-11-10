@@ -7,7 +7,7 @@ defineEmits<{
 </script>
 
 <template>
-  <div class="mt-[30px] flex h-full w-full justify-center px-20">
+  <div class="-mt-12 flex h-full w-full items-center justify-center px-20">
     <div>
       <span class="text-base font-semibold text-gray-400">
         Crypto currencies

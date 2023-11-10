@@ -8,13 +8,7 @@ export const CRYPTO_CURRENCIES = {
   USDT: {
     color: "#26A17B",
   },
-  BNB: {
-    color: "#F3BA2F",
-  },
   TON: {
     color: "#0088CC",
-  },
-  TRON: {
-    color: "#D9012C",
   },
 };
