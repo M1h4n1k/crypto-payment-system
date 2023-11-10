@@ -53,6 +53,7 @@ watch(
       currencyCrypto: newCurrency,
     });
     order.value.amountCrypto = orderUpd["amountCrypto"];
+    order.value.address = orderUpd["address"];
   },
 );
 
@@ -60,10 +61,9 @@ watch(
   () => order.value.email,
   async (newEmail) => {
     if (!dataLoaded) return;
-    const orderUpd = await updateOrder({
+    await updateOrder({
       email: newEmail,
     });
-    order.value.address = orderUpd["address"];
   },
 );
 

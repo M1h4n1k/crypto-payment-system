@@ -16,7 +16,7 @@ const email = ref(props.order.email);
 </script>
 
 <template>
-  <div class="-mt-12 flex h-full flex-col items-center justify-center px-24">
+  <div class="flex h-full flex-col items-center justify-center px-24">
     <div class="flex w-full items-center justify-between">
       <div class="relative mb-2 flex items-center space-x-2">
         <div

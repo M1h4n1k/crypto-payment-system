@@ -46,7 +46,13 @@ const emit = defineEmits<{
     </div>
     <div class="mt-4 w-full">
       <span class="block text-base font-semibold text-gray-400"> Status </span>
-      <span type="text" class="block w-full font-semibold outline-none">
+      <span
+        type="text"
+        class="block w-full font-semibold outline-none"
+        :style="{
+          color: order['status'] === 0 ? '#FF9B9B' : '#3cc013',
+        }"
+      >
         {{ order["status"] === 0 ? "Waiting for payment" : "Payment received" }}
       </span>
     </div>

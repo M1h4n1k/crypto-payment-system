@@ -19,6 +19,6 @@ defineProps<{
       />
       <span v-else>{{ order.amountFiat }} {{ order.currency }}</span>
     </div>
-    <span>Support</span>
+    <a href="https://t.me/M1h4n1k">Support</a>
   </div>
 </template>
