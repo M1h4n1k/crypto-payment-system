@@ -26,11 +26,11 @@ const email = ref(props.order.email);
           }"
         ></div>
         <img
-          class="absolute -left-7 cursor-pointer"
-          src="https://static-00.iconduck.com/assets.00/arrow-ios-back-icon-257x512-np6b911r.png"
+          class="absolute -left-[36px] h-[30px] w-[17px] cursor-pointer"
+          src="/backArrow.png"
           alt="back"
-          height="10"
-          width="15"
+          height="202"
+          width="118"
           @click="() => $emit('cancel')"
         />
       </div>

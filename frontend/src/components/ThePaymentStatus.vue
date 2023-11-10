@@ -6,7 +6,7 @@ defineProps<{
   order: Order;
 }>();
 
-const emit = defineEmits<{
+defineEmits<{
   (e: "cancel"): void;
 }>();
 </script>
@@ -22,12 +22,12 @@ const emit = defineEmits<{
           }"
         ></div>
         <img
-          class="absolute -left-7 cursor-pointer"
-          src="https://static-00.iconduck.com/assets.00/arrow-ios-back-icon-257x512-np6b911r.png"
+          class="absolute -left-[36px] h-[30px] w-[17px] cursor-pointer"
+          src="/backArrow.png"
           alt="back"
-          height="10"
-          width="15"
-          @click="() => emit('cancel')"
+          height="202"
+          width="118"
+          @click="() => $emit('cancel')"
         />
       </div>
       <span class="text-xl font-semibold">
@@ -50,7 +50,7 @@ const emit = defineEmits<{
         type="text"
         class="block w-full font-semibold outline-none"
         :style="{
-          color: order['status'] === 0 ? '#FF9B9B' : '#3cc013',
+          color: order['status'] === 0 ? '#FF9B9B' : '#32cb00',
         }"
       >
         {{ order["status"] === 0 ? "Waiting for payment" : "Payment received" }}
