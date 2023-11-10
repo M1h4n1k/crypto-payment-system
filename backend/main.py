@@ -14,10 +14,34 @@ app.add_middleware(
     allow_headers=['*'],
 )
 
+CURRENCIES = {
+    'BTC': {
+        'color': '#F7931A',
+    },
+    'ETH': {
+        'color': '#627EEA',
+    },
+    'USDT': {
+        'color': '#26A17B'
+    },
+    'BNB': {
+        'color': '#F3BA2F',
+    },
+    'TON': {
+        'color': '#0088CC',
+    },
+    'TRON': {
+        'color': '#D9012C',
+    }
+}
+
 
 @app.get('/order/{_id}')
 async def get_order(_id: str):
-    return await crud.get_order(_id)
+    order = await crud.get_order(_id)
+    if order is None:
+        return Response(status_code=404)
+    return order
 
 
 @app.post('/order')
@@ -31,37 +55,14 @@ async def update_order(_id: str, order: schemas.UpdateOrder):
     if upd_order is None:
         return Response(status_code=404)
 
-    if order.email is not None:
-        upd_order.email = order.email
-    if order.currencyCrypto is not None:
-        upd_order.currencyCrypto = order.currencyCrypto
-        ratio = 3  # recalculate ratio
-        upd_order.amountCrypto = upd_order.amountEUR * ratio
-    if order.stage is not None:
-        upd_order.stage = order.stage
+    order.id = _id
+    if CURRENCIES.get(order.currencyCrypto) is not None:
+        ratio = 5  # recalculate ratio
+        order.amountCrypto = upd_order.amountEUR * ratio
 
-    return await crud.update_order(upd_order)
+    return await crud.update_order(order)
 
 
 @app.get('/currencies')
 async def get_currencies():
-    return {
-        'BTC': {
-            'color': '#F7931A',
-        },
-        'ETH': {
-            'color': '#627EEA',
-        },
-        'USDT': {
-            'color': '#26A17B'
-        },
-        'BNB': {
-            'color': '#F3BA2F',
-        },
-        'TON': {
-            'color': '#0088CC',
-        },
-        'TRON': {
-            'color': '#D9012C',
-        }
-    }
+    return CURRENCIES

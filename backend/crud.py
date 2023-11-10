@@ -13,14 +13,15 @@ async def create_order(order: schemas.Order) -> schemas.Order:
     return created_order
 
 
-async def get_order(_id: str) -> schemas.Order:
+async def get_order(_id: str) -> schemas.Order | None:
     order = await db['orders'].find_one({'_id': _id})
+    if order is None:
+        return None
     return schemas.Order.model_validate(order)
 
 
-async def update_order(order: schemas.Order) -> schemas.Order:
-    await db['orders'].update_one({'_id': order.id}, {'$set': order.model_dump()})
+async def update_order(order: schemas.UpdateOrder) -> schemas.Order:
+    await db['orders'].update_one({'_id': order.id}, {'$set': order.model_dump(exclude_none=True, exclude={'id'})})
     updated_order = await db['orders'].find_one({'_id': order.id})
     return updated_order
-
 
