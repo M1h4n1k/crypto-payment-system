@@ -39,7 +39,7 @@ async def get_crypto_price(symbol: str, fiat: str) -> float:
 async def get_ton_transactions(address: str) -> list[dict]:
     async with aiohttp.ClientSession() as session:
         resp = await session.get(
-            'https://testnet.toncenter.com/api/v2/getTransactions?address=&limit=10',
+            'https://testnet.toncenter.com/api/v2/getTransactions',
             params={
                 'address': address,
                 'limit': 100,
