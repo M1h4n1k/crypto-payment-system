@@ -5,12 +5,13 @@ import TheEnteringEmail from "./TheEnteringEmail.vue";
 import ThePaymentStatus from "./ThePaymentStatus.vue";
 import TheSkeleton from "./TheSkeleton.vue";
 
-import { ref, watch, onMounted, nextTick } from "vue";
+import { nextTick, onMounted, ref, watch } from "vue";
 import { CRYPTO_CURRENCIES } from "../currencies";
-import { Currency } from "../types.ts";
+import { Currency, Order } from "../types.ts";
 
 const email = ref("");
 const amount = ref(1000);
+const amountCrypto = ref(0);
 const currency = ref("EUR");
 const chosenCurrency = ref(new Currency());
 let dataLoaded = false;
@@ -30,6 +31,7 @@ onMounted(() => {
       }
       email.value = data["email"];
       amount.value = data["amountEUR"];
+      amountCrypto.value = data["amountCrypto"];
       currency.value = data["currency"];
       stage.value = data["stage"];
       nextTick(() => {
@@ -38,23 +40,25 @@ onMounted(() => {
     });
 });
 
-const updateOrder = (body: {}): void => {
-  fetch(`http://127.0.0.1:8000/order/${oid}`, {
+const updateOrder = async (body: {}): Promise<Order> => {
+  let response = await fetch(`http://127.0.0.1:8000/order/${oid}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(body),
   });
+  return await response.json();
 };
 
 watch(
   () => chosenCurrency.value.name,
-  (newCurrency) => {
+  async (newCurrency) => {
     if (!dataLoaded) return;
-    updateOrder({
+    const orderUpd = await updateOrder({
       currencyCrypto: newCurrency,
     });
+    amountCrypto.value = orderUpd["amountCrypto"];
   },
 );
 
@@ -101,13 +105,13 @@ watch(stage, (newStage) => {
           stage = 2;
         }
       "
-      :amount="1000"
+      :amount="amountCrypto"
       :currency="chosenCurrency"
       :email="email"
     />
     <ThePaymentStatus
       v-else-if="stage === 2"
-      :amount="1000"
+      :amount="amountCrypto"
       :currency="chosenCurrency"
       @cancel="() => (stage = 1)"
     />

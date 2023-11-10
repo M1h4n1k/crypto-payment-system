@@ -10,7 +10,7 @@ const props = defineProps<{
 
 defineEmits<{
   (e: "cancel"): void;
-  (e: "proceed", em: Currency): void;
+  (e: "proceed", em: string): void;
 }>();
 
 const email = ref(props.email);

@@ -7,3 +7,19 @@ export class Currency {
     this.color = color;
   }
 }
+
+export interface Order {
+  _id: string;
+  currency: string;
+  currencyCrypto: string;
+  amountEUR: number;
+  amountCrypto: number;
+  description: string;
+  created_at: string;
+  email: string;
+  status: number;
+  address: string;
+  stage: number;
+  callback_url: string;
+  sign: string;
+}
