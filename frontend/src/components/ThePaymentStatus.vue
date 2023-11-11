@@ -24,13 +24,13 @@ defineEmits<{
           }"
         />
         <img
-          class="absolute -left-[36px] h-[30px] w-[17px] cursor-pointer"
+          class="absolute -left-[36px] h-[30px] w-[17px] cursor-pointer dark:invert-[70%]"
           src="/backArrow.svg"
           alt="back"
           @click="() => $emit('cancel')"
         />
       </div>
-      <span class="text-xl font-semibold">
+      <span class="text-xl font-semibold dark:text-gray-100">
         {{ order["amountCrypto"] }} {{ chosenCurrency["name"].toUpperCase() }}
       </span>
     </div>
@@ -39,7 +39,7 @@ defineEmits<{
       <span class="block text-base font-semibold text-gray-400"> Address </span>
       <span
         type="text"
-        class="block w-full border-b-2 border-[#00A9FF] py-1 font-semibold outline-none"
+        class="block w-full border-b-2 border-[#00A9FF] py-1 font-semibold outline-none dark:border-[#004fd6] dark:text-gray-100"
       >
         {{ order["address"] }}
       </span>
@@ -64,7 +64,7 @@ defineEmits<{
 
     <div class="mt-3 grid h-12 w-full grid-cols-5 gap-4">
       <button
-        class="col-span-2 flex items-center justify-center rounded-xl border-[3px] border-[#FF9B9B] text-2xl font-medium text-[#FF9B9B] hover:border-[#FF6B6B] hover:text-[#FF6B6B]"
+        class="col-span-2 flex items-center justify-center rounded-xl border-[3px] border-[#FF9B9B] text-2xl font-medium text-[#FF9B9B] transition-colors duration-200 hover:border-[#FF6B6B] hover:text-[#FF6B6B]"
         @click="() => $emit('cancel')"
       >
         Back

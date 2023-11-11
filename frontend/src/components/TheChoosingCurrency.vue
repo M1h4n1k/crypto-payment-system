@@ -24,7 +24,7 @@ defineEmits<{
           <img
             :src="val.link"
             :alt="currency"
-            class="h-full w-full rounded-full border border-white text-center leading-[5rem]"
+            class="h-full w-full rounded-full border border-white text-center leading-[5rem] transition-colors duration-75 dark:border-gray-700"
             :style="{
               'background-color': val.color,
             }"

@@ -84,7 +84,7 @@ watch(
 
 <template>
   <div
-    class="flex h-[440px] w-11/12 min-w-[300px] max-w-[650px] flex-col rounded-3xl bg-white"
+    class="flex h-[440px] w-11/12 min-w-[300px] max-w-[650px] flex-col overflow-hidden rounded-3xl bg-white shadow-xl duration-75 dark:bg-gray-700"
   >
     <TheHeader :order="order" />
 
