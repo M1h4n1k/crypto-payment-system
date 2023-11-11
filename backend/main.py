@@ -5,6 +5,7 @@ import schemas
 import aiohttp
 import os
 from config import CURRENCIES
+import re
 
 
 app = FastAPI()
@@ -16,6 +17,9 @@ app.add_middleware(
     allow_methods=['*'],
     allow_headers=['*'],
 )
+
+
+email_regex = re.compile(r'^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
 
 
 async def get_crypto_price(symbol: str, fiat: str) -> float:
@@ -102,6 +106,9 @@ async def update_order(_id: str, order: schemas.OrderUpdIn):
     full_order = await crud.get_order(_id)
     if full_order is None:
         return Response(status_code=404)
+
+    if order.email is not None and not re.match(email_regex, order.email):
+        return Response(status_code=400, content='Invalid email')
 
     order = schemas.OrderUpd(**order.model_dump())
     order.id = _id

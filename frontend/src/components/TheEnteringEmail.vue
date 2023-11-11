@@ -7,12 +7,29 @@ const props = defineProps<{
   order: Order;
 }>();
 
-defineEmits<{
+const emit = defineEmits<{
   (e: "cancel"): void;
   (e: "proceed", em: string): void;
 }>();
 
+const validateEmail = (email: string) => {
+  return String(email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    );
+};
+
 const email = ref(props.order.email);
+const emailError = ref(false);
+
+const passEmail = () => {
+  if (!validateEmail(email.value)) {
+    emailError.value = true;
+    return;
+  }
+  emit("proceed", email.value);
+};
 </script>
 
 <template>
@@ -49,8 +66,12 @@ const email = ref(props.order.email);
       placeholder="Email address"
       type="email"
       class="mt-8 w-full border-b-2 border-gray-200 bg-transparent py-1 outline-none transition-colors duration-200 focus:border-[#00A9FF] dark:border-gray-600 dark:text-gray-100 dark:focus:border-[#004fd6]"
+      :style="{
+        'border-color': emailError ? '#FF9B9B' : '',
+      }"
       v-model="email"
-      @keyup.enter="() => $emit('proceed', email)"
+      @input="emailError = false"
+      @keyup.enter="passEmail"
     />
 
     <div class="mt-8 grid h-12 w-full grid-cols-5 gap-4">
@@ -62,7 +83,7 @@ const email = ref(props.order.email);
       </button>
       <button
         class="col-span-3 flex items-center justify-center rounded-xl bg-[#00A9FF] text-2xl font-medium text-white transition-colors duration-200 hover:bg-[#0098e6] dark:bg-[#004fd6] dark:hover:bg-[#0040b2]"
-        @click="() => $emit('proceed', email)"
+        @click="passEmail"
       >
         Pay
       </button>
