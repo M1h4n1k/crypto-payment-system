@@ -3,18 +3,18 @@ import { CryptoCurrencyType } from "./types.ts";
 export const CRYPTO_CURRENCIES: CryptoCurrencyType = {
   BTC: {
     color: "#F7931A",
-    link: "/btc.webp",
+    link: "/btc.svg",
   },
   ETH: {
     color: "#627EEA",
-    link: "/eth.webp",
+    link: "/eth.svg",
   },
   USDT: {
     color: "#26A17B",
-    link: "/tether.webp",
+    link: "/usdt.svg",
   },
   TON: {
     color: "#0088CC",
-    link: "/ton.webp",
+    link: "/ton.svg",
   },
 };
