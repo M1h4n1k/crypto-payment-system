@@ -14,13 +14,22 @@ defineEmits<{
       </span>
       <div class="mt-5 flex w-full flex-wrap items-center justify-start gap-8">
         <div
-          v-for="(bg, currency) in CRYPTO_CURRENCIES"
+          v-for="(val, currency) in CRYPTO_CURRENCIES"
           @click="() => $emit('methodChosen', currency)"
-          class="currency hover:brightness-75"
+          class="currency flex items-center justify-center hover:brightness-75"
           :style="{
-            'background-color': bg.color,
+            'border-color': val.color,
           }"
-        ></div>
+        >
+          <img
+            :src="val.link"
+            :alt="currency"
+            class="h-full w-full rounded-full border border-white text-center leading-[5rem]"
+            :style="{
+              'background-color': val.color,
+            }"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -32,5 +41,6 @@ defineEmits<{
   width: 6rem;
   cursor: pointer;
   border-radius: 50%;
+  border: 3px solid;
 }
 </style>

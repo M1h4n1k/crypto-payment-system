@@ -19,18 +19,20 @@ const email = ref(props.order.email);
   <div class="flex h-full flex-col items-center justify-center px-24">
     <div class="flex w-full items-center justify-between">
       <div class="relative mb-2 flex items-center space-x-2">
-        <div
+        <img
+          :src="chosenCurrency['link']"
+          alt=""
           class="h-12 w-12 rounded-full"
           :style="{
             'background-color': chosenCurrency['color'],
           }"
-        ></div>
+        />
         <img
           class="absolute -left-[36px] h-[30px] w-[17px] cursor-pointer"
-          src="/backArrow.png"
+          src="/backArrow.svg"
           alt="back"
-          height="202"
-          width="118"
+          height="30"
+          width="17"
           @click="() => $emit('cancel')"
         />
       </div>

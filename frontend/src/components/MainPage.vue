@@ -26,6 +26,10 @@ onMounted(() => {
           CRYPTO_CURRENCIES[data.currencyCrypto as keyof CryptoCurrencyType][
             "color"
           ];
+        chosenCurrency.value.link =
+          CRYPTO_CURRENCIES[data.currencyCrypto as keyof CryptoCurrencyType][
+            "link"
+          ];
       }
       nextTick(() => {
         dataLoaded = true;
@@ -92,6 +96,7 @@ watch(
           chosenCurrency = new Currency(
             m,
             CRYPTO_CURRENCIES[m as keyof CryptoCurrencyType]['color'],
+            CRYPTO_CURRENCIES[m as keyof CryptoCurrencyType]['link'],
           );
           order.stage = 1;
         }
