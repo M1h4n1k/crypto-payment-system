@@ -6,6 +6,7 @@ import aiohttp
 import os
 from config import CURRENCIES
 import re
+from crypto_checking import check_paid
 
 
 app = FastAPI()
@@ -38,32 +39,6 @@ async def get_crypto_price(symbol: str, fiat: str) -> float:
         )
         data = await resp.json()
         return data['data'][0]['quote'][CURRENCIES[symbol]['cmc_id']]['price']
-
-
-async def get_ton_transactions(address: str) -> list[dict]:
-    async with aiohttp.ClientSession() as session:
-        resp = await session.get(
-            'https://testnet.toncenter.com/api/v2/getTransactions',
-            params={
-                'address': address,
-                'limit': 100,
-            },
-            headers={
-                'Accepts': 'application/json',
-                'X-API-Key': os.getenv('TON_API_KEY'),
-            }
-        )
-        data = await resp.json()
-        return data['result']
-
-
-async def check_paid(order: schemas.Order) -> bool:
-    if order.currencyCrypto == 'TON':
-        transactions = await get_ton_transactions(order.address)
-        for transaction in transactions:
-            if abs(int(transaction['in_msg']['value']) / 1000000000 - order.amountCrypto) < 0.000001:
-                return True
-    return False
 
 
 async def notify(order: schemas.Order):

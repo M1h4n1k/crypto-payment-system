@@ -70,3 +70,8 @@ class OrderUpd(OrderUpdIn):
     address: str | None = Field(default=None)
 
 
+class Transaction(BaseModel):
+    id: Annotated[str, AfterValidator(check_object_id)] = Field(default_factory=lambda: ObjectId().binary.hex(), alias='_id')
+    txid: str = Field()
+    currency: str = Field()
+    created_at: datetime = Field(default_factory=datetime.utcnow)

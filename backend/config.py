@@ -7,7 +7,7 @@ CURRENCIES = {
     'ETH': {
         'cmc_id': '1027',
         'color': '#627EEA',
-        'address': ''
+        'address': '0xFf40DC67E2357AA2F6473889281DA69C4f2143c8'
     },
     'USDT': {
         'cmc_id': '825',
