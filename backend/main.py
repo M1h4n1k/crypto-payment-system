@@ -4,9 +4,9 @@ import crud
 import schemas
 import aiohttp
 import os
-from config import CURRENCIES
+from crypto import CURRENCIES
 import re
-from crypto_checking import check_paid
+from crypto import check_paid
 
 
 app = FastAPI()
@@ -63,9 +63,17 @@ async def get_order(_id: str):
     if order.status == 1:
         return order
 
-    if order.stage == 2 and await check_paid(order):
+    is_paid = await check_paid(order.address, order.currencyCrypto, order.amountCrypto, crud.get_transaction)
+
+    if order.stage == 2 and is_paid is not False:
         order.status = 1
         await crud.update_order(order)
+        tx = schemas.Transaction(
+            txid=is_paid['hash'],
+            currency=order.currencyCrypto,
+            order_id=order.id,
+        )
+        await crud.create_transaction(tx)
         await notify(order)
 
     return order

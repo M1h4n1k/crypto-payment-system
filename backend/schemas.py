@@ -75,3 +75,4 @@ class Transaction(BaseModel):
     txid: str = Field()
     currency: str = Field()
     created_at: datetime = Field(default_factory=datetime.utcnow)
+    order_id: Annotated[str, AfterValidator(check_object_id)] = Field()

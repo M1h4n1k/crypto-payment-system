@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Currency, Order } from "../types.ts";
 
-defineProps<{
+const props = defineProps<{
   chosenCurrency: Currency;
   order: Order;
 }>();
@@ -9,6 +9,21 @@ defineProps<{
 defineEmits<{
   (e: "cancel"): void;
 }>();
+
+let intervalId: ReturnType<typeof setInterval>;
+
+const refreshOrder = async () => {
+  fetch(`http://127.0.0.1:8000/order/${props.order._id}`)
+    .then((response) => response.json())
+    .then((data: Order) => {
+      props.order.status = data.status;
+      if (data.status === 1) clearInterval(intervalId);
+    });
+};
+
+if (props.order.status === 0) {
+  intervalId = setInterval(refreshOrder, 5000);
+}
 </script>
 
 <template>

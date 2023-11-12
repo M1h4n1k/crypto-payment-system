@@ -29,6 +29,6 @@ export class Order {
 export type CryptoCurrencyType = {
   BTC: { color: string; link: string };
   ETH: { color: string; link: string };
-  USDT: { color: string; link: string };
+  // USDT: { color: string; link: string };
   TON: { color: string; link: string };
 };
