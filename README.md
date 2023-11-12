@@ -29,7 +29,7 @@ Also, different APIs are used for getting information about blockchain transacti
 5. Run frontend with `npm run dev`
 
 To create an order, call POST `/order` with body (you can also read it on backend_url/docs):
-```json
+```js
 {
   "currency": "any currency",  // usd/eur/etc
   "amountFiat": 9999,  // any amount, integer
