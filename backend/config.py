@@ -2,7 +2,7 @@ CURRENCIES = {
     'BTC': {
         'cmc_id': '1',
         'color': '#F7931A',
-        'address': ''
+        'address': '2N6hAeunpLxsJ3j9bLWrHi1JLQqKR7HDRBR'
     },
     'ETH': {
         'cmc_id': '1027',

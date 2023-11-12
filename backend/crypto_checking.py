@@ -42,13 +42,28 @@ async def get_eth_transactions(address: str) -> list[dict]:
         return data['result']
 
 
+async def get_btc_transactions(address: str) -> list[dict]:
+    async with aiohttp.ClientSession() as session:
+        resp = await session.get(
+            f'https://api.blockcypher.com/v1/btc/test3/addrs/{address}',
+            headers={
+                'Accepts': 'application/json',
+            },
+            params={
+                'token': os.getenv('BTC_API_KEY'),
+            }
+        )
+        data = await resp.json()
+        return data['txrefs']
+
+
 async def check_paid(order: schemas.Order) -> bool:
     if order.currencyCrypto == 'TON':
         transactions = await get_ton_transactions(order.address)
         for transaction in transactions:
             if await get_transaction(transaction['transaction_id']['hash'], order.currencyCrypto) is not None:
                 continue
-            if abs(int(transaction['in_msg']['value']) / 1000000000 - order.amountCrypto) < 0.000001:
+            if abs(int(transaction['in_msg']['value']) / 1000000000 - order.amountCrypto) < 0.00000001:
                 tx = schemas.Transaction(
                     txid=transaction['transaction_id']['hash'],
                     currency=order.currencyCrypto,
@@ -62,9 +77,23 @@ async def check_paid(order: schemas.Order) -> bool:
                 continue
             if await get_transaction(transaction['hash'], order.currencyCrypto) is not None:
                 continue
-            if abs(int(transaction['value']) / 1000000000000000000 - order.amountCrypto) < 0.000001:
+            if abs(int(transaction['value']) / 1000000000000000000 - order.amountCrypto) < 0.00000001:
                 tx = schemas.Transaction(
                     txid=transaction['hash'],
+                    currency=order.currencyCrypto,
+                )
+                await create_transaction(tx)
+                return True
+    if order.currencyCrypto == 'BTC':
+        transactions = await get_btc_transactions(order.address)
+        for transaction in transactions:
+            if await get_transaction(transaction['tx_hash'], order.currencyCrypto) is not None:
+                continue
+            if transaction['confirmations'] < 1:
+                continue
+            if abs(transaction['value'] / 100000000 - order.amountCrypto) < 0.00000001:
+                tx = schemas.Transaction(
+                    txid=transaction['tx_hash'],
                     currency=order.currencyCrypto,
                 )
                 await create_transaction(tx)

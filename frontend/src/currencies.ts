@@ -9,10 +9,6 @@ export const CRYPTO_CURRENCIES: CryptoCurrencyType = {
     color: "#627EEA",
     link: "/eth.svg",
   },
-  USDT: {
-    color: "#26A17B",
-    link: "/usdt.svg",
-  },
   TON: {
     color: "#0088CC",
     link: "/ton.svg",

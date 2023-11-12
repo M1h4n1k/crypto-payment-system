@@ -89,7 +89,7 @@ async def update_order(_id: str, order: schemas.OrderUpdIn):
     order.id = _id
     if CURRENCIES.get(order.currencyCrypto) is not None:
         ratio = await get_crypto_price(order.currencyCrypto, full_order.currency)
-        order.amountCrypto = full_order.amountFiat * ratio
+        order.amountCrypto = round(full_order.amountFiat * ratio, 8)
         order.address = CURRENCIES[order.currencyCrypto].get('address')
 
     return await crud.update_order(order)
