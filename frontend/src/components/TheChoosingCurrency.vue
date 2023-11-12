@@ -7,12 +7,12 @@ defineEmits<{
 </script>
 
 <template>
-  <div class="flex h-full w-full items-center justify-center px-20">
+  <div class="flex h-full w-full items-center justify-center px-10">
     <div class="-mt-12">
       <span class="text-base font-semibold text-gray-400">
         Crypto currencies
       </span>
-      <div class="mt-5 flex w-full flex-wrap items-center justify-start gap-8">
+      <div class="mt-5 flex w-full flex-wrap items-center justify-center gap-8">
         <div
           v-for="(val, currency) in CRYPTO_CURRENCIES"
           @click="() => $emit('methodChosen', currency)"

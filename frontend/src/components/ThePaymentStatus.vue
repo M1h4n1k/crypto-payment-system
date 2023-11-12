@@ -27,7 +27,9 @@ if (props.order.status === 0) {
 </script>
 
 <template>
-  <div class="flex h-full w-full flex-col items-center justify-center px-24">
+  <div
+    class="flex h-full w-full flex-col items-center justify-center px-12 sm:px-24"
+  >
     <div class="flex w-full items-center justify-between">
       <div class="relative mb-2 flex items-center space-x-2">
         <img
@@ -54,7 +56,7 @@ if (props.order.status === 0) {
       <span class="block text-base font-semibold text-gray-400"> Address </span>
       <span
         type="text"
-        class="block w-full border-b-2 border-[#00A9FF] py-1 font-semibold outline-none dark:border-[#004fd6] dark:text-gray-100"
+        class="block w-full break-words border-b-2 border-[#00A9FF] py-1 font-semibold outline-none dark:border-[#004fd6] dark:text-gray-100"
       >
         {{ order["address"] }}
       </span>
@@ -72,7 +74,7 @@ if (props.order.status === 0) {
       </span>
     </div>
 
-    <p class="mt-7 block text-sm font-semibold text-gray-400">
+    <p class="mt-2 block text-sm font-semibold text-gray-400 sm:mt-7">
       You have to transfer the exact amount in one transaction. Multiple
       transactions are not supported
     </p>
