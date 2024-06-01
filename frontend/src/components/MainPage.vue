@@ -16,7 +16,7 @@ let dataLoaded = false;
 let oid = new URL(location.href).searchParams.get("oid");
 
 onMounted(() => {
-  fetch(`http://127.0.0.1:8000/order/${oid}`)
+  fetch(`${import.meta.env.VITE_API_URL}/order/${oid}`)
     .then((response) => response.json())
     .then((data: Order) => {
       order.value = data;
@@ -38,7 +38,7 @@ onMounted(() => {
 });
 
 const updateOrder = async (body: {}): Promise<Order> => {
-  let response = await fetch(`http://127.0.0.1:8000/order/${oid}`, {
+  let response = await fetch(`${import.meta.env.VITE_API_URL}/order/${oid}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -80,6 +80,29 @@ watch(
     });
   },
 );
+
+const chooseCurrency = (m: string) => {
+  chosenCurrency.value = new Currency(
+    m,
+    CRYPTO_CURRENCIES[m as keyof CryptoCurrencyType]["color"],
+    CRYPTO_CURRENCIES[m as keyof CryptoCurrencyType]["link"],
+  );
+  order.value.stage = 1;
+};
+
+const cancelEmail = () => {
+  chosenCurrency.value = new Currency();
+  order.value.stage = 0;
+};
+
+const proceedEmail = (email: string) => {
+  order.value.email = email;
+  order.value.stage = 2;
+};
+
+const cancelPayment = () => {
+  order.value.stage = 1;
+};
 </script>
 
 <template>
@@ -91,38 +114,19 @@ watch(
     <TheSkeleton v-if="order.stage === -1" />
     <TheChoosingCurrency
       v-else-if="order.stage === 0"
-      @methodChosen="
-        (m: string) => {
-          chosenCurrency = new Currency(
-            m,
-            CRYPTO_CURRENCIES[m as keyof CryptoCurrencyType]['color'],
-            CRYPTO_CURRENCIES[m as keyof CryptoCurrencyType]['link'],
-          );
-          order.stage = 1;
-        }
-      "
+      @methodChosen="chooseCurrency"
     />
     <TheEnteringEmail
       v-else-if="order.stage === 1"
-      @cancel="
-        () => {
-          chosenCurrency = new Currency();
-          order.stage = 0;
-        }
-      "
-      @proceed="
-        (e: string) => {
-          order.email = e;
-          order.stage = 2;
-        }
-      "
+      @cancel="cancelEmail"
+      @proceed="proceedEmail"
       :chosenCurrency="chosenCurrency"
       :order="order"
     />
     <ThePaymentStatus
       v-else-if="order.stage === 2"
       :chosenCurrency="chosenCurrency"
-      @cancel="() => (order.stage = 1)"
+      @cancel="cancelPayment"
       :order="order"
     />
   </div>

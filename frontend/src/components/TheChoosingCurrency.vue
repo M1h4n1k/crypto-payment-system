@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { CRYPTO_CURRENCIES } from "../currencies.ts";
 
-defineEmits<{
+const emit = defineEmits<{
   (e: "methodChosen", currency: string): void;
 }>();
 </script>
@@ -15,7 +15,7 @@ defineEmits<{
       <div class="mt-5 flex w-full flex-wrap items-center justify-center gap-8">
         <div
           v-for="(val, currency) in CRYPTO_CURRENCIES"
-          @click="() => $emit('methodChosen', currency)"
+          @click="emit('methodChosen', currency)"
           class="currency flex items-center justify-center hover:brightness-75"
           :style="{
             'border-color': val.color,

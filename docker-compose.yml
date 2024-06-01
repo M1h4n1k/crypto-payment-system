@@ -1,0 +1,44 @@
+version: "3.9"
+services:
+  mongo:
+    image: mongo:latest
+    volumes:
+      - mongo-volume:/data/db
+    healthcheck:
+      test: echo 'db.runCommand ("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+  backend:
+    restart: always
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile
+    ports:
+      - "3001:80"
+    env_file:
+      - /backend/.env
+    depends_on:
+      mongo:
+        condition: service_healthy
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+  frontend:
+    restart: always
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile
+    ports:
+      - "3000:80"
+    logging:
+      driver: "json-file"
+      options:
+          max-size: "10m"
+volumes:
+  mongo-volume:

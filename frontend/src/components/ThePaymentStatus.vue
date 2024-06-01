@@ -6,14 +6,14 @@ const props = defineProps<{
   order: Order;
 }>();
 
-defineEmits<{
+const emit = defineEmits<{
   (e: "cancel"): void;
 }>();
 
 let intervalId: ReturnType<typeof setInterval>;
 
 const refreshOrder = async () => {
-  fetch(`http://127.0.0.1:8000/order/${props.order._id}`)
+  fetch(`${import.meta.env.VITE_API_URL}/order/${props.order._id}`)
     .then((response) => response.json())
     .then((data: Order) => {
       props.order.status = data.status;
@@ -44,7 +44,7 @@ if (props.order.status === 0) {
           class="absolute -left-[36px] h-[30px] w-[17px] cursor-pointer dark:invert-[70%]"
           src="/backArrow.svg"
           alt="back"
-          @click="() => $emit('cancel')"
+          @click="emit('cancel')"
         />
       </div>
       <span class="text-xl font-semibold dark:text-gray-100">
@@ -82,7 +82,7 @@ if (props.order.status === 0) {
     <div class="mt-3 grid h-12 w-full grid-cols-5 gap-4">
       <button
         class="col-span-2 flex items-center justify-center rounded-xl border-[3px] border-[#FF9B9B] text-2xl font-medium text-[#FF9B9B] transition-colors duration-200 hover:border-[#FF6B6B] hover:text-[#FF6B6B]"
-        @click="() => $emit('cancel')"
+        @click="emit('cancel')"
       >
         Back
       </button>

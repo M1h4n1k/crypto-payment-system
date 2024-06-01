@@ -50,7 +50,7 @@ const passEmail = () => {
           alt="back"
           height="30"
           width="17"
-          @click="() => $emit('cancel')"
+          @click="emit('cancel')"
         />
       </div>
       <span
@@ -77,7 +77,7 @@ const passEmail = () => {
     <div class="mt-8 grid h-12 w-full grid-cols-5 gap-4">
       <button
         class="col-span-2 flex items-center justify-center rounded-xl border-[3px] border-[#FF9B9B] text-2xl font-medium text-[#FF9B9B] transition-colors duration-200 hover:border-[#FF6B6B] hover:text-[#FF6B6B]"
-        @click="() => $emit('cancel')"
+        @click="emit('cancel')"
       >
         Back
       </button>
